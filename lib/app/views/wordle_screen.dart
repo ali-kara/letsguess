@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:letsguess/app/app_colors.dart';
 import 'package:letsguess/app/data/word_list.dart';
 import 'package:letsguess/app/models/letter_model.dart';
 import 'package:letsguess/app/models/word_model.dart';
@@ -52,11 +53,11 @@ class _WordleScreenState extends State<WordleScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          'WORDLE',
+          'LETS GUESS',
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
-            letterSpacing: 4,
+            letterSpacing: 10,
           ),
         ),
       ),
@@ -65,7 +66,7 @@ class _WordleScreenState extends State<WordleScreen> {
         children: [
           Board(
             board: _board,
-            flipCardKeys: [],
+            flipCardKeys: _flipCardKeys,
           ),
           const SizedBox(
             height: 80,
@@ -134,7 +135,7 @@ class _WordleScreenState extends State<WordleScreen> {
         }
 
         await Future.delayed(
-            Duration(
+            const Duration(
               milliseconds: 150,
             ),
             () =>
@@ -148,6 +149,24 @@ class _WordleScreenState extends State<WordleScreen> {
   _checkIfWinOrLoss() {
     if (_currentWord!.wordString == _solution.wordString) {
       _gameStatus = GameStatus.won;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          dismissDirection: DismissDirection.none,
+          duration: const Duration(
+            days: 1,
+          ),
+          backgroundColor: correctColor,
+          content: const Text(
+            'You Win ! ',
+            style: TextStyle(color: Colors.white),
+          ),
+          action: SnackBarAction(
+            label: 'New Game',
+            onPressed: _restartGame,
+          ),
+        ),
+      );
     } else if (_currentWordIndex + 1 >= _board.length) {
       _gameStatus = GameStatus.lost;
 
@@ -160,7 +179,7 @@ class _WordleScreenState extends State<WordleScreen> {
           backgroundColor: Colors.redAccent[200],
           content: Text(
             'You Lost ! Solution: ${_solution.wordString}',
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           action: SnackBarAction(
             label: 'New Game',
