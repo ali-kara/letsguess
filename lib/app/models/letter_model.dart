@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:letsguess/app/app_colors.dart';
+import 'package:letsguess/app/data/app_colors.dart';
 
 enum LetterStatus { initial, notInWord, inWord, correct }
 

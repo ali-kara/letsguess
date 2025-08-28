@@ -2,12 +2,14 @@ import 'dart:math';
 
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:letsguess/app/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:letsguess/app/data/app_colors.dart';
 import 'package:letsguess/app/data/word_list.dart';
 import 'package:letsguess/app/models/letter_model.dart';
 import 'package:letsguess/app/models/word_model.dart';
 import 'package:letsguess/app/widgets/board.dart';
 import 'package:letsguess/app/widgets/keyboard.dart';
+import 'package:letsguess/app/providers/audio_provider.dart';
 
 enum GameStatus { playing, submitting, lost, won }
 
@@ -47,14 +49,19 @@ class _WordleScreenState extends State<WordleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Start background music when game starts
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Background music will be handled by the audio provider
+    });
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'LETS GUESS',
-          style: TextStyle(
+        title: Text(
+          'app_title'.tr(),
+          style: const TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
             letterSpacing: 10,
@@ -157,12 +164,12 @@ class _WordleScreenState extends State<WordleScreen> {
             days: 1,
           ),
           backgroundColor: correctColor,
-          content: const Text(
-            'You Win ! ',
-            style: TextStyle(color: Colors.white),
+          content: Text(
+            'you_win'.tr(),
+            style: const TextStyle(color: Colors.white),
           ),
           action: SnackBarAction(
-            label: 'New Game',
+            label: 'new_game_button'.tr(),
             onPressed: _restartGame,
           ),
         ),
@@ -178,11 +185,11 @@ class _WordleScreenState extends State<WordleScreen> {
           ),
           backgroundColor: Colors.redAccent[200],
           content: Text(
-            'You Lost ! Solution: ${_solution.wordString}',
+            '${'you_lost'.tr()} ${'solution'.tr()}: ${_solution.wordString}',
             style: const TextStyle(color: Colors.white),
           ),
           action: SnackBarAction(
-            label: 'New Game',
+            label: 'new_game_button'.tr(),
             onPressed: _restartGame,
           ),
         ),
